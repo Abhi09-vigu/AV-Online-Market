@@ -39,6 +39,19 @@ const Home = () => {
     { id: 5, name: 'Gaming Console', price: 39999, img: 'https://picsum.photos/id/1050/400/300', link: '/products' },
     { id: 6, name: '4K Smart TV', price: 69999, img: 'https://picsum.photos/id/250/400/300', link: '/product/2' },
   ];
+  const ads = [
+    { id: 1, title: 'Big Diwali Sale', img: 'https://picsum.photos/id/1060/600/300', link: '/products/sale' },
+    { id: 2, title: 'Brand Week', img: 'https://picsum.photos/id/1061/600/300', link: '/products' },
+    { id: 3, title: 'New Arrivals', img: 'https://picsum.photos/id/1062/600/300', link: '/products/new' },
+  ];
+
+  // Also recommended (mirror styling of promoted)
+  const alsoRecommended = [
+    { id: 11, name: 'Portable Speaker', price: 1999, img: 'https://picsum.photos/id/1070/400/300', link: '/product/7' },
+    { id: 12, name: 'Fitness Band', price: 2499, img: 'https://picsum.photos/id/1071/400/300', link: '/product/8' },
+    { id: 13, name: 'Smartwatch', price: 9999, img: 'https://picsum.photos/id/1072/400/300', link: '/product/3' },
+    { id: 14, name: 'Bluetooth Earbuds', price: 1499, img: 'https://picsum.photos/id/1073/400/300', link: '/product/6' },
+  ];
 
   return (
     <div className="bg-gray-100 min-h-screen">
@@ -59,6 +72,73 @@ const Home = () => {
             Shop Now
           </Link>
         </div>
+      </div>
+
+      {/* Ads Section - horizontal banners */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800">Sponsored Ads</h2>
+        </div>
+        <AutoScrollRow speed={0.8} className="py-2" paused={false}>
+          {ads.map((a) => (
+            <div key={a.id} className="w-96 bg-white rounded-lg shadow overflow-hidden mr-4">
+              <Link to={a.link}>
+                <img src={a.img} alt={a.title} className="w-full h-40 object-cover" />
+              </Link>
+              <div className="p-3">
+                <div className="font-semibold text-sm mb-1">{a.title}</div>
+                <div className="text-gray-500 text-sm">Sponsored</div>
+              </div>
+            </div>
+          ))}
+        </AutoScrollRow>
+      </div>
+
+      {/* About Products - informational section */}
+      <div className="max-w-7xl mx-auto px-4 py-10">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-4">About Our Products</h2>
+        <p className="text-gray-600 mb-6 max-w-3xl">
+          We source high-quality products from trusted brands and verified sellers. Each product listing includes detailed descriptions, real images, customer reviews, and ratings so you can make informed decisions.
+          Enjoy fast shipping, easy returns, and great customer support.
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="text-2xl mb-2">📦</div>
+            <h3 className="font-semibold mb-2">Verified Sellers</h3>
+            <p className="text-gray-600 text-sm">All sellers are verified to ensure product authenticity.</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="text-2xl mb-2">🔒</div>
+            <h3 className="font-semibold mb-2">Secure Payments</h3>
+            <p className="text-gray-600 text-sm">Multiple payment options with secure checkout.</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="text-2xl mb-2">⭐</div>
+            <h3 className="font-semibold mb-2">Customer Reviews</h3>
+            <p className="text-gray-600 text-sm">Read honest reviews and ratings from buyers.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* You may also like - mirrors 'Recommended Products' */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-semibold text-gray-800">You May Also Like</h2>
+          <div />
+        </div>
+        <AutoScrollRow speed={1.2} className="py-2" paused={false} showControls={true}>
+          {alsoRecommended.map((p) => (
+            <div key={p.id} className="w-64 bg-white rounded-lg shadow overflow-hidden">
+              <Link to={p.link}>
+                <img src={p.img} alt={p.name} className="w-full h-40 object-cover" />
+              </Link>
+              <div className="p-3">
+                <div className="font-semibold text-sm mb-1">{p.name}</div>
+                <div className="text-accent font-bold">{new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR'}).format(p.price)}</div>
+              </div>
+            </div>
+          ))}
+        </AutoScrollRow>
       </div>
 
     
