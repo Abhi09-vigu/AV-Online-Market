@@ -21,6 +21,31 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    googleId: {
+      type: String,
+      sparse: true,
+    },
+    avatar: {
+      type: String,
+    },
+    phoneNumber: {
+      type: String,
+    },
+    address: {
+      street: String,
+      city: String,
+      state: String,
+      zipCode: String,
+      country: String,
+    },
+    wishlist: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product'
+    }],
+    orders: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Order'
+    }],
   },
   {
     timestamps: true,

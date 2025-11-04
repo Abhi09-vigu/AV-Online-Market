@@ -1,49 +1,98 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
-const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login = ({ embedded = false }) => {
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Lightweight mock login: save user to localStorage and redirect to home
-    const user = { email };
-    localStorage.setItem('avmarket_user', JSON.stringify(user));
-    navigate('/');
+    setIsLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to login');
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      navigate('/');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow">
-        <h2 className="text-2xl font-semibold mb-6">Sign in to your account</h2>
-        <form onSubmit={handleSubmit}>
-          <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
+  const FormContent = (
+    <div className="w-full space-y-6">
+      <div>
+        <h2 className="text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+        <p className="mt-2 text-center text-sm text-gray-600">
+          Or{' '}
+          <Link to="/account" className="font-medium text-blue-600 hover:text-blue-500">
+            create a new account
+          </Link>
+        </p>
+      </div>
+
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span className="block sm:inline">{error}</span>
+        </div>
+      )}
+
+      <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
+        <div>
           <input
+            id="email"
+            name="email"
             type="email"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 mb-4 border rounded focus:outline-none"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none"
+            placeholder="Email address"
           />
+        </div>
 
-          <label className="block mb-2 text-sm font-medium text-gray-700">Password</label>
+        <div>
           <input
+            id="password"
+            name="password"
             type="password"
             required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 mb-4 border rounded focus:outline-none"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 focus:outline-none"
+            placeholder="Password"
           />
-
-          <button className="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:opacity-95">Sign In</button>
-        </form>
-
-        <div className="mt-4 text-sm text-gray-600">
-          Don\'t have an account? <a href="/signup" className="text-blue-600">Sign up</a>
         </div>
-      </div>
+
+        <div>
+          <button type="submit" disabled={isLoading} className="w-full flex justify-center py-3 px-4 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
+            {isLoading ? 'Signing in...' : 'Sign in'}
+          </button>
+        </div>
+      </form>
+
+      {/* Google authentication removed. Only email/password login available. */}
+    </div>
+  );
+
+  if (embedded) return FormContent;
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow">{FormContent}</div>
     </div>
   );
 };
