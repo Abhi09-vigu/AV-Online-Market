@@ -47,9 +47,9 @@ router.get('/myorders', protect, async (req, res) => {
   }
 });
 
-// @desc    Get order by ID
-// @route   GET /api/orders/:id
-// @access  Private
+// @desc Get order by ID
+// @route GET /api/orders/:id
+// @access Private
 router.get('/:id', protect, async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate(
