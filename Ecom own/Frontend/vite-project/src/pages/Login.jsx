@@ -78,7 +78,7 @@ const Login = ({ embedded = false }) => {
         </div>
 
         <div>
-          <button type="submit" disabled={isLoading} className="w-full flex justify-center py-3 px-4 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
+          <button type="submit" disabled={isLoading} className="mx-auto w-full max-w-xs flex justify-center py-3 px-4 rounded-lg text-white bg-blue-600 hover:bg-blue-700">
             {isLoading ? 'Signing in...' : 'Sign in'}
           </button>
         </div>
